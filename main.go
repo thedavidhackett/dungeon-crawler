@@ -22,7 +22,7 @@ import (
 	"dungeon-crawler/controllers"
 	"dungeon-crawler/middlewares"
 	"dungeon-crawler/models"
-
+	"dungeon-crawler/websocket"
 
 )
 
@@ -34,7 +34,7 @@ func init(){
 	}
 
 	store = sessions.NewCookieStore(
-		[]byte("secret-key"),
+		[]byte(os.Getenv("SECRET_KEY")),
 	)
 
 	store.Options = &sessions.Options{
@@ -76,17 +76,25 @@ func main(){
 	}
 
 	db := client.Database("dungeoncrawlertest")
+	go websocket.Hub.Run()
 
-	ah := controllers.NewAuthHandler(*db, googleOauthConfig, store)
+	authHandler := controllers.NewAuthHandler(*db, googleOauthConfig, store)
+	apiHandler := controllers.NewAPIHandler(*db, store)
 
 	r := mux.NewRouter()
 	api := r.PathPrefix("/api").Subrouter()
 	auth := r.PathPrefix("/auth").Subrouter()
 
-	api.HandleFunc("/users", ah.Index)
-	auth.HandleFunc("/google/login", ah.OauthGoogleLogin)
-	auth.HandleFunc("/google/callback", ah.OauthGoogleCallback)
-	auth.HandleFunc("/check-logged-in", ah.CheckLoggedIn)
+	auth.HandleFunc("/google/login", authHandler.OauthGoogleLogin)
+	auth.HandleFunc("/google/callback", authHandler.OauthGoogleCallback)
+	auth.HandleFunc("/check-logged-in", authHandler.CheckLoggedIn)
+	api.HandleFunc("/get-dungeons", apiHandler.GetDungeonsCreated)
+	api.HandleFunc("/create-dungeon", apiHandler.CreateDungeon)
+	api.HandleFunc("/get-dungeon/{id}", apiHandler.GetDungeon)
+	api.HandleFunc("/get-dungeon-characters/{id}", apiHandler.GetDungeonCharacters)
+	// api.HandleFunc("/create-character", apiHandler.CreateCharacter)
+	api.HandleFunc("/ws/{id}", apiHandler.WebSocketEndpoint)
+	api.HandleFunc("/edit-dungeon/{id}", apiHandler.EditDungeon)
 
 	spa := spaHandler{staticPath: "public", indexPath: "index.html"}
 	r.PathPrefix("/").Handler(spa)

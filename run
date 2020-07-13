@@ -1,0 +1,3 @@
+#!/bin/sh
+
+CompileDaemon -exclude-dir=.git -exclude-dir=node_modules -command="./dungeon-crawler"

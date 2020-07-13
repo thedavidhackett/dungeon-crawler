@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
+import { RecoilRoot, useRecoilState } from "recoil";
+import AuthenticatedApp from "./components/AuthenticatedApp";
+import Login from "./components/Login";
+import { userState } from "./atoms";
 
 function App() {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useRecoilState(userState);
   useEffect(() => {
     fetch("/auth/check-logged-in", {
       method: "GET",
@@ -13,14 +17,12 @@ function App() {
     });
   }, []);
 
-  return user ? (
-    <div>Hello World</div>
-  ) : (
-    <div>
-      Not Logged In{" "}
-      <a href="http://localhost:8000/auth/google/login">Log in with google</a>
-    </div>
-  );
+  return user ? <AuthenticatedApp /> : <Login />;
 }
 
-ReactDOM.render(<App />, document.getElementById("app"));
+ReactDOM.render(
+  <RecoilRoot>
+    <App />
+  </RecoilRoot>,
+  document.getElementById("app")
+);

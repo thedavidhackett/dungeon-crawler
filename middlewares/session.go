@@ -1,11 +1,16 @@
 package middlewares
 
 import (
+	"context"
 	"net/http"
 
 	"github.com/gorilla/sessions"
 )
 
+type contextKey int
+
+//AuthenticatedUserKey ..
+const AuthenticatedUserKey contextKey = 0
 
 //SessionMiddleware ...
 type SessionMiddleware struct {
@@ -38,8 +43,14 @@ func (sm *SessionMiddleware) Middleware(next http.Handler) http.Handler {
 			return
 		}
 
+		user, _ := session.Values["user"]
 
-		next.ServeHTTP(w, r)
+		ctxWithUser := context.WithValue(r.Context(), AuthenticatedUserKey, user)
+		//create a new request using that new context
+		rWithUser := r.WithContext(ctxWithUser)
+		//call the real handler, passing the new request
+
+		next.ServeHTTP(w, rWithUser)
 
     })
 }

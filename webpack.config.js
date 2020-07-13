@@ -3,7 +3,6 @@ var HtmlWebpackPlugin = require("html-webpack-plugin");
 var CopyWebpackPlugin = require("copy-webpack-plugin");
 
 module.exports = {
-  watch: true,
   entry: "./assets/index.js",
   output: {
     path: path.resolve(__dirname, "public"),
@@ -14,7 +13,11 @@ module.exports = {
     rules: [
       { test: /\.(js)$/, use: "babel-loader" },
       { test: /\.css$/, use: ["style-loader", "css-loader"] },
-      { test: /\.(png|svg|jpg|gif)$/, use: ["file-loader"] },
+      { test: /\.(png|jpg|gif)$/, use: ["file-loader"] },
+      {
+        test: /\.svg$/,
+        use: ["@svgr/webpack"],
+      },
     ],
   },
   mode: "development",
@@ -22,8 +25,8 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: "./assets/index.html",
     }),
-    // new CopyWebpackPlugin({
-    //   patterns: [{ from: "./assets/images", to: "images" }],
-    // }),
+    new CopyWebpackPlugin({
+      patterns: [{ from: "./assets/images", to: "images" }],
+    }),
   ],
 };
