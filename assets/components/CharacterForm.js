@@ -1,34 +1,25 @@
 import React from "react";
-import {
-  Button,
-  TextField,
-  InputLabel,
-  Select,
-  MenuItem,
-} from "@material-ui/core";
+import { Button, Form, FormGroup, Label, Input } from "reactstrap";
 
 export default function CharacterForm({ onSubmit, label }) {
   return (
-    <form onSubmit={onSubmit}>
-      <TextField
-        name="name"
-        id="name"
-        label="Name"
-        variant="outlined"
-        required
-      ></TextField>
-      <InputLabel id="image-label">Image</InputLabel>
-      <Select labelId="image-label" id="image" name="image" required>
-        <MenuItem value={"red-circle.png"}>Red</MenuItem>
-        <MenuItem value={"blue-circle.png"}>Blue</MenuItem>
-        <MenuItem value={"green-cirle.png"}>Green</MenuItem>
-        <MenuItem value={"yellow-cirle.png"}>Yellow</MenuItem>
-        <MenuItem value={"purple-cirle.png"}>Purple</MenuItem>
-        <MenuItem value={"black-cirle.png"}>Black</MenuItem>
-      </Select>
-      <Button type="submit" variant="contained" color="primary">
-        {label}
-      </Button>
-    </form>
+    <Form onSubmit={onSubmit}>
+      <FormGroup>
+        <Label for="name">Name</Label>
+        <Input type="text" name="name" id="name" required />
+      </FormGroup>
+      <FormGroup>
+        <Label for="image">Image</Label>
+        <Input type="select" id="image" name="image" required>
+          <option value="red-circle.png">Red</option>
+          <option value="blue-circle.png">Blue</option>
+          <option value="green-cirle.png">Green</option>
+          <option value="yellow-cirle.png">Yellow</option>
+          <option value="purple-cirle.png">Purple</option>
+          <option value="black-cirle.png">Black</option>
+        </Input>
+      </FormGroup>
+      <Button>{label}</Button>
+    </Form>
   );
 }

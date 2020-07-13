@@ -1,24 +1,15 @@
 import React, { useState } from "react";
 import { Redirect } from "react-router-dom";
 import {
-  Container,
-  Typography,
-  TextField,
   Button,
-  Grid,
-  makeStyles,
-} from "@material-ui/core";
-
-const useStyles = makeStyles((theme) => ({
-  paper: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-  },
-  heading: {
-    marginBottom: theme.spacing(2),
-  },
-}));
+  Form,
+  FormGroup,
+  Label,
+  Input,
+  Container,
+  Row,
+  Col,
+} from "reactstrap";
 
 export default function CreateDungeon() {
   const [id, setId] = useState(null);
@@ -47,51 +38,33 @@ export default function CreateDungeon() {
   return id ? (
     <Redirect to={"/dungeon/" + id} />
   ) : (
-    <Container maxWidth="sm" className={classes.paper}>
-      <Typography component="h1" variant="h4" className={classes.heading}>
-        Create a new Dungeon
-      </Typography>
-      <form onSubmit={handleSubmit}>
-        <Grid container spacing={2}>
-          <Grid item xs={12}>
-            <TextField
-              name="name"
-              id="name"
-              label="Name"
-              variant="outlined"
-              required
-              fullWidth
-            ></TextField>
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <TextField
-              name="height"
-              id="height"
-              label="Height"
-              variant="outlined"
-              required
-              type="number"
-              fullWidth
-            ></TextField>
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <TextField
-              name="width"
-              id="width"
-              label="Width"
-              variant="outlined"
-              required
-              type="number"
-              fullWidth
-            ></TextField>
-          </Grid>
-          <Grid item xs={12}>
-            <Button type="submit" variant="contained" color="primary" fullWidth>
-              Create
-            </Button>
-          </Grid>
-        </Grid>
-      </form>
+    <Container>
+      <h4>Create Dungeon</h4>
+      <Form onSubmit={handleSubmit}>
+        <Row>
+          <Col xs={12}>
+            <FormGroup>
+              <Label for="name">Name</Label>
+              <Input type="text" name="name" id="name" />
+            </FormGroup>
+          </Col>
+          <Col xs={12} sm={6}>
+            <FormGroup>
+              <Label for="height">Height</Label>
+              <Input type="number" name="height" id="height" />
+            </FormGroup>
+          </Col>
+          <Col xs={12} sm={6}>
+            <FormGroup>
+              <Label for="width">Width</Label>
+              <Input type="number" name="width" id="width" />
+            </FormGroup>
+          </Col>
+          <Col xs={12}>
+            <Button>Create</Button>
+          </Col>
+        </Row>
+      </Form>
     </Container>
   );
 }

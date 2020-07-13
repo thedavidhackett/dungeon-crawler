@@ -3,13 +3,7 @@ import { useParams } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import { userState } from "../atoms";
 import CharacterForm from "./CharacterForm";
-import {
-  Button,
-  Container,
-  Typography,
-  TextField,
-  Grid,
-} from "@material-ui/core";
+import { Container, Row, Col } from "reactstrap";
 
 export default function Dungeon() {
   const { id } = useParams();
@@ -134,56 +128,56 @@ export default function Dungeon() {
   };
 
   const placeCharacter = (e) => {
-    let elemLeft = e.target.offsetLeft + e.target.clientLeft;
-    let elemTop = e.target.offsetTop + e.target.clientTop;
+    let rect = e.target.getBoundingClientRect();
+    let x = e.clientX - rect.left;
+    let y = e.clientY - rect.top;
     let newDungeon = { ...dungeon };
-    newCharacter.positionX = e.pageX - elemLeft;
-    newCharacter.positionY = e.pageY - elemTop;
+    newCharacter.positionX = x;
+    newCharacter.positionY = y;
     newDungeon.characters.push({ ...newCharacter });
     setNewCharacter(null);
     sendMsg(JSON.stringify(newDungeon));
   };
 
   const moveCharacter = (e) => {
-    let elemLeft = e.target.offsetLeft + e.target.clientLeft;
-    let elemTop = e.target.offsetTop + e.target.clientTop;
+    let rect = e.target.getBoundingClientRect();
+    let x = e.clientX - rect.left;
+    let y = e.clientY - rect.top;
     let newDungeon = { ...dungeon };
     if (newDungeon.characters && newDungeon.characters[0]) {
-      newDungeon.characters[0].positionX = e.pageX - elemLeft;
-      newDungeon.characters[0].positionY = e.pageY - elemTop;
+      newDungeon.characters[0].positionX = Math.floor(x);
+      newDungeon.characters[0].positionY = Math.floor(y);
       sendMsg(JSON.stringify(newDungeon));
     }
   };
 
   return (
     <Container>
-      <Typography component="h1" variant="h4">
-        {dungeon.name}
-      </Typography>
-      <Grid container>
+      <h4>{dungeon.name}</h4>
+      <Row>
         {dm && (
-          <Grid item xs={12}>
+          <Col xs={12}>
             {!newCharacter && (
               <CharacterForm onSubmit={createNpc} label="Create NPC" />
             )}
-          </Grid>
+          </Col>
         )}
         {noCharacter && (
-          <Grid item xs={12}>
+          <Col xs={12}>
             <CharacterForm
               onSubmit={createCharacter}
               label="Create Character"
             />
-          </Grid>
+          </Col>
         )}
-        <Grid item xs={2}>
+        <Col xs={12}>
           <ul>
             {dungeon.characters
               ? dungeon.characters.map((c) => <li>{c.name}</li>)
               : ""}
           </ul>
-        </Grid>
-        <Grid item xs={10} zeroMinWidth className="canvas-container">
+        </Col>
+        <Col item xs={12} className="canvas-container">
           {newCharacter && <label>Place character</label>}
           <canvas
             ref={canvasRef}
@@ -191,8 +185,8 @@ export default function Dungeon() {
             height={(dungeon.height ? dungeon.height : 0) * tileSize}
             onClick={newCharacter ? placeCharacter : moveCharacter}
           />
-        </Grid>
-      </Grid>
+        </Col>
+      </Row>
     </Container>
   );
 }

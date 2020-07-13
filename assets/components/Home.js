@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Container } from "@material-ui/core";
+import { Container } from "reactstrap";
 import { Link } from "react-router-dom";
 
 export default function Home() {
@@ -14,7 +14,7 @@ export default function Home() {
   }, []);
 
   return (
-    <Container maxWidth="lg">
+    <Container>
       <Link to="/create-dungeon">Create a new dungeon</Link>
       <ul>
         {dungeons.map((dungeon) => {
