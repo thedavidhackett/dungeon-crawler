@@ -23,6 +23,7 @@ module.exports = {
   mode: "development",
   plugins: [
     new HtmlWebpackPlugin({
+      favicon: "./assets/images/dungeon-fill.png",
       template: "./assets/index.html",
     }),
     new CopyWebpackPlugin({

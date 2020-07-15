@@ -1,12 +1,16 @@
 import React from "react";
 import { Button, Form, FormGroup, Label, Input } from "reactstrap";
 
-export default function CharacterForm({ onSubmit, label }) {
+export default function CharacterForm({ onSubmit, label, onCancel }) {
   return (
     <Form onSubmit={onSubmit}>
       <FormGroup>
         <Label for="name">Name</Label>
         <Input type="text" name="name" id="name" required />
+      </FormGroup>
+      <FormGroup>
+        <Label for="initiative">Initiative</Label>
+        <Input type="number" name="initiative" id="initiative" required />
       </FormGroup>
       <FormGroup>
         <Label for="image">Image</Label>
@@ -20,6 +24,7 @@ export default function CharacterForm({ onSubmit, label }) {
         </Input>
       </FormGroup>
       <Button>{label}</Button>
+      {onCancel && <Button onClick={onCancel}>Cancel</Button>}
     </Form>
   );
 }

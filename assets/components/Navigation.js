@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import {
   Collapse,
   Navbar,
@@ -13,15 +14,15 @@ export default function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
   const toggle = () => setIsOpen(!isOpen);
   return (
-    <Navbar color="light" light expand="md">
-      <NavbarBrand href="/">Dungeon Crawler</NavbarBrand>
+    <Navbar color="dark" dark expand="md">
+      <NavbarBrand>Dungeon Crawler</NavbarBrand>
       <NavbarToggler onClick={toggle} />
       <Collapse isOpen={isOpen} navbar>
         <Nav className="mr-auto" navbar>
           <NavItem>
-            <NavLink href="https://github.com/reactstrap/reactstrap">
-              GitHub
-            </NavLink>
+            <Link to="/" className="nav-link">
+              Home
+            </Link>
           </NavItem>
         </Nav>
       </Collapse>

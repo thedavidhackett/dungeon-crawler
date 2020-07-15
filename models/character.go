@@ -12,4 +12,5 @@ type Character struct {
 	PositionX int `bson:"positionX" json:"positionX"`
 	PositionY int `bson:"positionY" json:"positionY"`
 	Image string `bson:"image" json:"image"`
+	Initiative int `bson:"initiative" json:"initiative"`
 }

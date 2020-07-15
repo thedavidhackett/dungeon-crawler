@@ -13,7 +13,6 @@ import {
 
 export default function CreateDungeon() {
   const [id, setId] = useState(null);
-  const classes = useStyles();
   const handleSubmit = (e) => {
     e.preventDefault();
     fetch("/api/create-dungeon", {

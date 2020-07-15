@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Container } from "reactstrap";
+import { Container, Row, Col, Button } from "reactstrap";
 import { Link } from "react-router-dom";
 
 export default function Home() {
@@ -15,16 +15,29 @@ export default function Home() {
 
   return (
     <Container>
-      <Link to="/create-dungeon">Create a new dungeon</Link>
-      <ul>
-        {dungeons.map((dungeon) => {
-          return (
-            <li key={dungeon.id}>
-              <Link to={"/dungeon/" + dungeon.id}>{dungeon.name}</Link>
-            </li>
-          );
-        })}
-      </ul>
+      <Row>
+        <Col xs={12} md={{ size: 6, offset: 3 }}>
+          <div className="dungeons">
+            <h4>Your Dungeons</h4>
+            {dungeons.length > 0 ? (
+              <ul className="list-group dungeons-list">
+                {dungeons.map((dungeon) => {
+                  return (
+                    <li key={dungeon.id} className="list-group-item">
+                      <Link to={"/dungeon/" + dungeon.id}>{dungeon.name}</Link>
+                    </li>
+                  );
+                })}
+              </ul>
+            ) : (
+              <p>No Dungeons Yet</p>
+            )}
+            <Link to="/create-dungeon">
+              <Button>Create a new dungeon</Button>
+            </Link>
+          </div>
+        </Col>
+      </Row>
     </Container>
   );
 }

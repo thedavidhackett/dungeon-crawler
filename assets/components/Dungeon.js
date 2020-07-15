@@ -3,7 +3,14 @@ import { useParams } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import { userState } from "../atoms";
 import CharacterForm from "./CharacterForm";
-import { Container, Row, Col } from "reactstrap";
+import {
+  Container,
+  Row,
+  Col,
+  Button,
+  ButtonGroup,
+  ButtonToolbar,
+} from "reactstrap";
 
 export default function Dungeon() {
   const { id } = useParams();
@@ -15,6 +22,7 @@ export default function Dungeon() {
   const socket = new WebSocket("ws://localhost:8000/api/ws/" + id);
   const [noCharacter, setNoCharacter] = useState(true);
   const [newCharacter, setNewCharacter] = useState(null);
+  const [addingCharacter, setAddingCharacter] = useState(false);
 
   let connect = (cb) => {
     console.log("Attempting Connection...");
@@ -112,6 +120,7 @@ export default function Dungeon() {
     e.preventDefault();
     setNewCharacter({
       name: e.target.name.value,
+      initiative: parseInt(e.target.initiative.value, 10),
       npc: true,
       image: e.target.image.value,
     });
@@ -121,6 +130,7 @@ export default function Dungeon() {
     e.preventDefault();
     setNewCharacter({
       name: e.target.name.value,
+      initiative: parseInt(e.target.initiative.value, 10),
       npc: false,
       userId: user.id,
       image: e.target.image.value,
@@ -136,6 +146,7 @@ export default function Dungeon() {
     newCharacter.positionY = y;
     newDungeon.characters.push({ ...newCharacter });
     setNewCharacter(null);
+    setAddingCharacter(false);
     sendMsg(JSON.stringify(newDungeon));
   };
 
@@ -153,38 +164,64 @@ export default function Dungeon() {
 
   return (
     <Container>
-      <h4>{dungeon.name}</h4>
-      <Row>
+      <h2>{dungeon.name}</h2>
+      <Row className="characters">
         {dm && (
-          <Col xs={12}>
-            {!newCharacter && (
-              <CharacterForm onSubmit={createNpc} label="Create NPC" />
+          <Col xs={12} sm={6}>
+            {!newCharacter && addingCharacter && (
+              <CharacterForm
+                onSubmit={createNpc}
+                label="Create NPC"
+                onCancel={(e) => {
+                  e.preventDefault();
+                  setAddingCharacter(false);
+                }}
+              />
+            )}
+            {!addingCharacter && (
+              <Button
+                onClick={(e) => {
+                  e.preventDefault();
+                  setAddingCharacter(true);
+                }}
+              >
+                Add an NPC
+              </Button>
             )}
           </Col>
         )}
         {noCharacter && (
-          <Col xs={12}>
+          <Col xs={12} sm={6}>
             <CharacterForm
               onSubmit={createCharacter}
               label="Create Character"
             />
           </Col>
         )}
-        <Col xs={12}>
+        <Col xs={12} sm={6}>
           <ul>
             {dungeon.characters
               ? dungeon.characters.map((c) => <li>{c.name}</li>)
               : ""}
           </ul>
         </Col>
-        <Col item xs={12} className="canvas-container">
-          {newCharacter && <label>Place character</label>}
-          <canvas
-            ref={canvasRef}
-            width={(dungeon.width ? dungeon.width : 0) * tileSize}
-            height={(dungeon.height ? dungeon.height : 0) * tileSize}
-            onClick={newCharacter ? placeCharacter : moveCharacter}
-          />
+      </Row>
+      <Row>
+        <Col xs={12}>
+          <ButtonToolbar>
+            <ButtonGroup>
+              <Button>Add NPC</Button>
+            </ButtonGroup>
+          </ButtonToolbar>
+          <div className="canvas-container">
+            {newCharacter && <label>Place character</label>}
+            <canvas
+              ref={canvasRef}
+              width={(dungeon.width ? dungeon.width : 0) * tileSize}
+              height={(dungeon.height ? dungeon.height : 0) * tileSize}
+              onClick={newCharacter ? placeCharacter : moveCharacter}
+            />
+          </div>
         </Col>
       </Row>
     </Container>

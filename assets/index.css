@@ -2,6 +2,45 @@ body {
   margin: 0;
 }
 
+h2 {
+  margin-bottom: 2rem;
+}
+
+h4 {
+  margin-bottom: 1rem;
+}
+
+nav {
+  margin-bottom: 2rem;
+}
+
 .canvas-container {
   overflow: scroll;
+}
+
+.dungeons {
+  text-align: center;
+}
+
+.dungeons-list {
+  margin-bottom: 1rem;
+}
+
+.characters {
+  margin-bottom: 1rem;
+}
+
+.login {
+  margin-top: 5rem;
+  text-align: center;
+}
+
+.login-image {
+  width: 50%;
+  margin-bottom: 1rem;
+}
+
+.btn img {
+  height: 19px;
+  margin-right: 0.5rem;
 }
